@@ -3,7 +3,7 @@
 ## 1. Contexto do Projeto
 A operação logística é um dos principais fatores que influenciam a experiência do cliente no e-commerce. Atrasos na entrega podem impactar diretamente a satisfação, a reputação da empresa e a recorrência de compras.
 
-Este projeto analisa dados reais de pedidos da Olist com o objetivo de **avaliar o desempenho das entregas**, identificar **padrões de atraso** e entender **como esses atrasos afetam a satisfação dos clientes**.
+Este projeto analisa dados reais de pedidos da Olist com o objetivo de **avaliar o desempenho das entregas**, identificar **padrões de atraso** e entender **como esses atrasos se associam à satisfação dos clientes**.
 
 ## 2. Visão Geral dos Dados
 A análise considera os **96.470 pedidos entregues** da base, uma linha por pedido. Pedidos cancelados, indisponíveis ou ainda em trânsito ficam fora das métricas de entrega, para não serem contados como "no prazo". Um pedido é considerado atrasado quando chega depois do dia estimado informado ao cliente.
@@ -30,7 +30,7 @@ O dashboard (aba `Dashboard` do `Dashboard.xlsx`) reúne em uma única página o
 Os prazos informados são, em média, cerca de duas vezes maiores que o tempo real de entrega. Mesmo com essa folga, 6,8% dos pedidos ainda chegam atrasados, e quando atrasam, passam em média mais de 10 dias do prazo.
 
 ## 4. Análise Logística
-Entre os 804 vendedores com pelo menos 20 pedidos entregues, os piores têm **cerca de um terço dos pedidos atrasados** (até 33%), contra 6,8% na média da operação. Entre os vendedores com pelo menos 5 pedidos atrasados, alguns apresentam **atraso médio bem acima do restante da base** (mais de 25 dias além do prazo), indicando gargalos operacionais específicos.
+Entre os 804 vendedores com pelo menos 20 pedidos entregues, os piores têm **cerca de um terço dos pedidos atrasados** (até 33%), contra 6,8% na média da operação. Entre os vendedores com pelo menos 20 pedidos entregues e 5 pedidos atrasados, alguns apresentam **atraso médio bem acima do restante da base** (mais de 25 dias além do prazo), indicando gargalos operacionais específicos.
 
 O volume mínimo é importante: sem ele, o ranking seria dominado por 51 vendedores com 100% de atraso, todos com apenas 1 ou 2 pedidos entregues.
 
@@ -43,13 +43,15 @@ Os atrasos apresentam **concentração regional bem definida**. Estados do **Nor
 
 O Nordeste também concentra os **atrasos mais longos**. Considerando os estados com pelo menos 10 pedidos atrasados, **Sergipe (SE, 16,2 dias), Ceará (CE, 15,2), Rio Grande do Norte (RN, 14,5) e Piauí (PI, 13,4)** lideram o atraso médio, ao lado do Rio de Janeiro (RJ, 13,5).
 
-Já os **estados da Região Norte**, como **Roraima (RR), Amapá (AP) e Amazonas (AM)**, têm os **maiores tempos totais de entrega** (entre 26 e 29 dias em média, contra 8,7 dias em São Paulo), mas poucos pedidos atrasados: Amapá, Amazonas, Acre e Rondônia têm taxas de atraso entre 3% e 4%, as menores do país. Roraima é a exceção (12%), mas com apenas 41 pedidos entregues. Como os prazos informados já consideram a distância, o problema dessa região é o ciclo longo, e não o descumprimento do prazo. Esses estados ficam fora do ranking de atraso médio porque têm de 2 a 5 pedidos atrasados cada, poucos demais para uma média confiável.
+A **Região Norte** tem os **maiores tempos totais de entrega** (Roraima, Amapá e Amazonas levam entre 26 e 29 dias em média, contra 8,7 dias em São Paulo) e, no conjunto, a **segunda maior taxa de atraso do país** (8,6%, acima da média de 6,8%). Mas o comportamento dentro da região é bem diferente:
+- **Amazonas (2,8%), Rondônia (2,9%), Amapá (3,0%) e Acre (3,8%)** têm as menores taxas de atraso do país. Nesses estados, os prazos informados são longos (de 39 a 47 dias, contra 24,4 na média nacional) e absorvem o ciclo de entrega demorado. Eles ficam fora do ranking de atraso médio porque têm de 2 a 7 pedidos atrasados cada, poucos demais para uma média confiável.
+- **Pará (11,2%)**, que concentra 53% dos pedidos entregues da região, e **Tocantins (9,9%)** atrasam acima da média, com um padrão mais próximo do Nordeste. Roraima também tem taxa alta (12,2%), mas com apenas 41 pedidos entregues.
 
 Esse padrão sugere dois comportamentos distintos:
-- **Nordeste (e RJ em volume):** atrasos mais frequentes e mais longos, ou seja, o prazo prometido não é cumprido;
-- **Norte:** ciclos de entrega longos, associados a desafios de distância e infraestrutura, mas em geral dentro do prazo prometido.
+- **Prazo descumprido** — Nordeste, Pará, Tocantins e RJ (em volume): atrasos mais frequentes e, no Nordeste, também mais longos;
+- **Ciclo longo, mas dentro do prazo** — Amazonas, Rondônia, Amapá e Acre, associados a desafios de distância e infraestrutura.
 
-Os resultados indicam a necessidade de **estratégias logísticas regionalizadas**, com foco no cumprimento de prazos no Nordeste e na redução do tempo de ciclo nas regiões mais distantes dos centros de distribuição.
+Os resultados indicam a necessidade de **estratégias logísticas regionalizadas**, com foco no cumprimento de prazos no Nordeste, no Pará e no Tocantins, e na redução do tempo de ciclo nos estados do Norte mais distantes dos centros de distribuição.
 
 ## 6. Análise de Satisfação do Cliente
 Os resultados mostram uma **associação forte entre atraso e pior avaliação do cliente**. Considerando os pedidos entregues com avaliação, os entregues dentro do prazo apresentam **score médio de 4,3**, enquanto os atrasados registram apenas **2,3**, uma queda de aproximadamente **47% na avaliação**.

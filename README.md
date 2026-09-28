@@ -212,6 +212,8 @@ Diversas variáveis derivadas foram criadas para apoiar a análise.
 
 Todas as variáveis de entrega são calculadas apenas para pedidos entregues. Pedidos cancelados, indisponíveis ou em trânsito ficam vazios, para não serem contados como "no prazo".
 
+Os tempos são contados em **dias de calendário**: as subtrações abaixo usam apenas a data de cada evento, sem o horário.
+
 ### Tempo Real de Entrega (`tempo_entrega_real`)
 
 Número de dias entre a compra e a entrega efetiva ao cliente.
@@ -313,7 +315,7 @@ A análise final é apresentada em um dashboard de **uma única página** no Exc
 * **Três seções lado a lado**, com dois gráficos cada: logística (sellers), satisfação do cliente e geografia (estados);
 * **Principais conclusões** em uma faixa no rodapé, com fonte e período dos dados.
 
-Os dados que alimentam os gráficos ficam em abas ocultas (`Dados_*` e `Rankings`), carregadas a partir dos CSVs da pasta `Tabelas/`.
+Os dados que alimentam os gráficos ficam em abas ocultas (`Dados_*` e `Rankings`), com os valores dos CSVs da pasta `Tabelas/` no momento da construção. O dashboard é estático: se os CSVs forem regenerados, ele precisa ser atualizado.
 
 ### 1. Desempenho Logístico
 
@@ -327,7 +329,7 @@ Essa métrica identifica os sellers em que os problemas de entrega acontecem com
 
 #### Top 10 Sellers por Atraso Médio
 
-Classifica os sellers pela média de dias de atraso entre os seus pedidos atrasados, considerando apenas sellers com pelo menos 5 pedidos atrasados.
+Classifica os sellers pela média de dias de atraso entre os seus pedidos atrasados, considerando apenas sellers com pelo menos 20 pedidos entregues e 5 pedidos atrasados.
 
 Essa métrica mede a gravidade dos problemas de entrega, e não a sua frequência.
 
@@ -362,7 +364,7 @@ A análise geográfica avalia o desempenho das entregas por estado.
 
 #### Top 10 Estados por Taxa de Atraso
 
-Identifica os estados onde as entregas atrasadas acontecem com mais frequência.
+Identifica os estados onde as entregas atrasadas acontecem com mais frequência, considerando apenas estados com pelo menos 100 pedidos entregues. Com isso ficam de fora Roraima (41 pedidos), Amapá (67) e Acre (80), cujas taxas dependeriam de pouquíssimos pedidos.
 
 #### Top 10 Estados por Atraso Médio
 
@@ -398,14 +400,17 @@ Estados do **Nordeste**, como Alagoas (AL, 21%), Maranhão (MA, 17%), Sergipe (S
 
 O Nordeste também concentra os **atrasos mais longos**: entre os estados com pelo menos 10 pedidos atrasados, Sergipe (SE, 16,2 dias), Ceará (CE, 15,2), Rio Grande do Norte (RN, 14,5) e Piauí (PI, 13,4) estão no topo, ao lado do Rio de Janeiro (RJ, 13,5).
 
-Os **estados do Norte**, como Roraima (RR), Amapá (AP) e Amazonas (AM), têm os maiores tempos totais de entrega (de 26 a 29 dias em média, contra 8,7 dias em São Paulo), mas poucos pedidos atrasados: Amapá, Amazonas, Acre e Rondônia têm taxas de atraso entre 3% e 4%, as menores do país. Roraima é a exceção (12%), mas com apenas 41 pedidos entregues. Como os prazos informados já consideram a distância, o problema dessa região é o ciclo de entrega longo, e não o descumprimento do prazo.
+A **Região Norte** tem os maiores tempos totais de entrega (Roraima, Amapá e Amazonas levam de 26 a 29 dias em média, contra 8,7 dias em São Paulo) e, no conjunto, a segunda maior taxa de atraso do país (8,6%, acima da média de 6,8%). Mas o comportamento dentro da região é bem diferente:
+
+* **Amazonas (2,8%), Rondônia (2,9%), Amapá (3,0%) e Acre (3,8%)** têm as menores taxas de atraso do país. Nesses estados, os prazos informados são longos (de 39 a 47 dias, contra 24,4 na média nacional) e absorvem o ciclo de entrega demorado.
+* **Pará (11,2%)**, que concentra 53% dos pedidos entregues da região, e **Tocantins (9,9%)** atrasam acima da média, com um padrão mais próximo do Nordeste. Roraima também tem taxa alta (12,2%), mas com apenas 41 pedidos entregues.
 
 Isso sugere dois padrões operacionais diferentes:
 
-* **Nordeste:** atrasos mais frequentes e mais longos, ou seja, o prazo prometido não é cumprido;
-* **Norte:** ciclos de entrega longos, mas em geral dentro do prazo prometido.
+* **Prazo descumprido** — Nordeste, Pará e Tocantins: atrasos mais frequentes e, no Nordeste, também mais longos;
+* **Ciclo longo, mas dentro do prazo** — Amazonas, Rondônia, Amapá e Acre.
 
-A distinção é importante porque cada padrão exige uma resposta operacional diferente: no Nordeste, cumprir o prazo; no Norte, encurtar o ciclo de entrega.
+A distinção é importante porque cada padrão exige uma resposta operacional diferente: onde o prazo é descumprido, o foco é cumpri-lo; onde o ciclo é longo, o foco é encurtá-lo.
 
 ---
 
