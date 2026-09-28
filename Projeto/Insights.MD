@@ -6,67 +6,75 @@ A operação logística é um dos principais fatores que influenciam a experiên
 Este projeto analisa dados reais de pedidos da Olist com o objetivo de **avaliar o desempenho das entregas**, identificar **padrões de atraso** e entender **como esses atrasos afetam a satisfação dos clientes**.
 
 ## 2. Visão Geral dos Dados
-A análise foi construída a partir de quatro bases principais, já tratadas e consolidadas:
+A análise considera os **96.470 pedidos entregues** da base, uma linha por pedido. Pedidos cancelados, indisponíveis ou ainda em trânsito ficam fora das métricas de entrega, para não serem contados como "no prazo". Um pedido é considerado atrasado quando chega depois do dia estimado informado ao cliente.
 
-- **atrasos_por_seller.csv**: contém a taxa de atraso e o atraso médio em dias por vendedor, permitindo avaliar o desempenho logístico individual.
-- **atrasos_por_estado.csv**: apresenta os indicadores de atraso agregados por estado, permitindo a análise geográfica.
-- **atraso_vs_score.csv**: mostra a nota média dos pedidos em dois cenários: entregas no prazo e entregas atrasadas.
-- **probabilidade_nota1.csv**: informa a probabilidade de um pedido receber nota 1 quando há atraso e quando não há atraso.
+As métricas foram consolidadas em cinco bases:
 
-Essas bases foram utilizadas diretamente na construção dos dashboards e na geração dos principais insights do projeto.
+- **kpis_gerais.csv**: indicadores gerais de entrega.
+- **atrasos_por_seller.csv**: número de pedidos, taxa de atraso e atraso médio em dias por vendedor, considerando apenas vendedores com pelo menos 20 pedidos entregues.
+- **atrasos_por_estado.csv**: número de pedidos, taxa de atraso, atraso médio e tempo médio de entrega por estado.
+- **atraso_vs_score.csv**: nota média dos pedidos em dois cenários, entregas no prazo e entregas atrasadas.
+- **probabilidade_nota1.csv**: probabilidade de um pedido receber nota 1 quando há atraso e quando não há atraso.
 
-## 3. Principais KPIs (Dashboard de KPIs)
-O dashboard de KPIs apresenta uma visão geral do desempenho das entregas na operação analisada. Os principais indicadores são:
+## 3. Principais KPIs
+O dashboard (aba `Dashboard` do `Dashboard.xlsx`) reúne em uma única página os KPIs, os gráficos das três análises e as principais conclusões. Os cartões no topo apresentam uma visão geral do desempenho das entregas:
 
-- **Taxa de pedidos atrasados:** percentual de pedidos entregues fora do prazo.
-- **Atraso médio (dias):** média de dias de atraso dos pedidos atrasados.
-- **Tempo médio de entrega real (dias):** tempo médio entre a compra e a entrega efetiva.
-- **Tempo médio estimado (dias):** prazo médio informado ao cliente no momento da compra.
-- **Diferença (estimado − real):** diferença média entre o prazo estimado e o prazo real de entrega, indicando o erro da estimativa.
+| Indicador | Valor | Definição |
+| --- | ---: | --- |
+| Taxa de pedidos atrasados | 6,8% | Percentual de pedidos entregues depois do dia estimado. |
+| Atraso médio | 10,6 dias | Média de dias além do prazo, somente entre os pedidos atrasados. |
+| Tempo médio de entrega real | 12,5 dias | Tempo médio entre a compra e a entrega efetiva. |
+| Tempo médio estimado | 24,4 dias | Prazo médio informado ao cliente no momento da compra. |
+| Folga média da estimativa | 11,9 dias | Diferença média entre o prazo estimado e o prazo real (estimado − real). |
 
-
-Esses KPIs permitem uma avaliação rápida da eficiência logística e da confiabilidade das estimativas de entrega.
+Os prazos informados são, em média, cerca de duas vezes maiores que o tempo real de entrega. Mesmo com essa folga, 6,8% dos pedidos ainda chegam atrasados, e quando atrasam, passam em média mais de 10 dias do prazo.
 
 ## 4. Análise Logística
-A análise por vendedor mostrou que existe um grupo de sellers com **taxas de atraso extremamente elevadas**, concentrando a maior parte dos problemas logísticos. Além disso, alguns vendedores apresentam **atraso médio em dias significativamente superior ao restante da base**, indicando gargalos operacionais específicos.
+Entre os 804 vendedores com pelo menos 20 pedidos entregues, os piores têm **cerca de um terço dos pedidos atrasados** (até 33%), contra 6,8% na média da operação. Entre os vendedores com pelo menos 5 pedidos atrasados, alguns apresentam **atraso médio bem acima do restante da base** (mais de 25 dias além do prazo), indicando gargalos operacionais específicos.
+
+O volume mínimo é importante: sem ele, o ranking seria dominado por 51 vendedores com 100% de atraso, todos com apenas 1 ou 2 pedidos entregues.
+
+Vale lembrar que o atraso cobre todo o ciclo do pedido (preparação pelo vendedor e transporte), então o vendedor não é um indicador isolado da transportadora.
 
 Os resultados indicam que os atrasos **não estão distribuídos de forma homogênea** entre os sellers, sugerindo oportunidades claras de atuação direcionada nos piores desempenhos.
 
 ## 5. Análise Geográfica
-Os atrasos apresentam **concentração regional bem definida**. Estados do **Nordeste, como Alagoas (AL), Maranhão (MA), Sergipe (SE) e Piauí (PI)**, lideram o ranking de **maior taxa de pedidos atrasados**, indicando maior recorrência de falhas logísticas nessas regiões.
+Os atrasos apresentam **concentração regional bem definida**. Estados do **Nordeste, como Alagoas (AL, 21%), Maranhão (MA, 17%), Sergipe (SE, 15%), Piauí (PI, 14%) e Ceará (CE, 14%)**, lideram o ranking de **maior taxa de pedidos atrasados**, indicando maior recorrência de falhas logísticas nessas regiões. O **Rio de Janeiro (RJ)** também merece atenção: com 12% de atraso sobre mais de 12 mil pedidos, é o segundo estado em número absoluto de pedidos atrasados, atrás apenas de São Paulo.
 
-Por outro lado, o **maior atraso médio em dias** está concentrado principalmente nos **estados da Região Norte**, como **Roraima (RR), Amapá (AP) e Amazonas (AM)**, sugerindo que, além de menos frequentes em alguns casos, os atrasos nessas localidades tendem a ser **mais longos quando ocorrem**.
+O Nordeste também concentra os **atrasos mais longos**. Considerando os estados com pelo menos 10 pedidos atrasados, **Sergipe (SE, 16,2 dias), Ceará (CE, 15,2), Rio Grande do Norte (RN, 14,5) e Piauí (PI, 13,4)** lideram o atraso médio, ao lado do Rio de Janeiro (RJ, 13,5).
 
-Esse padrão evidencia dois comportamentos distintos:
-- Regiões com **alto volume de atrasos frequentes** (principalmente Nordeste);
-- Regiões com **atrasos mais longos**, associados a desafios de distância e infraestrutura (principalmente Norte).
+Já os **estados da Região Norte**, como **Roraima (RR), Amapá (AP) e Amazonas (AM)**, têm os **maiores tempos totais de entrega** (entre 26 e 29 dias em média, contra 8,7 dias em São Paulo), mas poucos pedidos atrasados: Amapá, Amazonas, Acre e Rondônia têm taxas de atraso entre 3% e 4%, as menores do país. Roraima é a exceção (12%), mas com apenas 41 pedidos entregues. Como os prazos informados já consideram a distância, o problema dessa região é o ciclo longo, e não o descumprimento do prazo. Esses estados ficam fora do ranking de atraso médio porque têm de 2 a 5 pedidos atrasados cada, poucos demais para uma média confiável.
 
-Os resultados indicam a necessidade de **estratégias logísticas regionalizadas**, com foco em eficiência operacional no Nordeste e redução do tempo de ciclo nas regiões mais distantes dos centros de distribuição.
+Esse padrão sugere dois comportamentos distintos:
+- **Nordeste (e RJ em volume):** atrasos mais frequentes e mais longos, ou seja, o prazo prometido não é cumprido;
+- **Norte:** ciclos de entrega longos, associados a desafios de distância e infraestrutura, mas em geral dentro do prazo prometido.
+
+Os resultados indicam a necessidade de **estratégias logísticas regionalizadas**, com foco no cumprimento de prazos no Nordeste e na redução do tempo de ciclo nas regiões mais distantes dos centros de distribuição.
 
 ## 6. Análise de Satisfação do Cliente
-Os resultados evidenciam um **impacto direto e expressivo dos atrasos na percepção do cliente**. Pedidos entregues dentro do prazo apresentam **score médio de 4,1**, enquanto pedidos atrasados registram apenas **2,5**, uma queda de aproximadamente **39% na avaliação**.
+Os resultados mostram uma **associação forte entre atraso e pior avaliação do cliente**. Considerando os pedidos entregues com avaliação, os entregues dentro do prazo apresentam **score médio de 4,3**, enquanto os atrasados registram apenas **2,3**, uma queda de aproximadamente **47% na avaliação**.
 
-Além disso, a **probabilidade de um pedido receber nota mínima (1)** salta de **10% nos pedidos no prazo para 45% nos pedidos atrasados**, indicando um aumento de **4,5 vezes no risco de avaliações extremamente negativas** quando ocorre atraso.
+Além disso, a **probabilidade de um pedido receber nota mínima (1)** salta de **6,6% nos pedidos no prazo para 53,8% nos pedidos atrasados**: mais da metade dos pedidos atrasados recebe a pior nota possível, um risco cerca de **8 vezes maior** de avaliação extremamente negativa.
 
-Esses dados confirmam que o atraso na entrega é um dos **principais vetores de insatisfação do cliente**, afetando não apenas a média das avaliações, mas também intensificando fortemente a ocorrência de experiências críticas.
+Esses dados indicam que o atraso na entrega está entre os **principais sinais de insatisfação do cliente**, afetando não apenas a média das avaliações, mas também a ocorrência de experiências críticas. Por se tratar de uma análise observacional, o resultado mostra associação, não causa isolada: outros fatores (como problemas no produto) podem acompanhar os atrasos.
 
 ## 7. Impactos no Negócio
-Os atrasos logísticos geram impactos diretos em quatro frentes críticas do negócio. No pilar operacional, refletem ineficiências na cadeia de entrega, aumentando custos com retrabalho, suporte e possíveis reentregas. Na experiência do cliente, os dados mostram queda expressiva no score médio e forte aumento no risco de avaliações extremamente negativas.
+Os atrasos logísticos se relacionam com quatro frentes críticas do negócio. No pilar operacional, podem refletir ineficiências na cadeia de entrega, com potencial aumento de custos com suporte e reentregas (não medidos nesta análise). Na experiência do cliente, os dados mostram queda expressiva no score médio e forte aumento no risco de avaliações extremamente negativas.
 
-Do ponto de vista de reputação, a alta concentração de notas baixas associadas a atrasos compromete a imagem da plataforma, afetando a confiança do consumidor e a taxa de recompra. Por fim, há impacto financeiro indireto, uma vez que clientes insatisfeitos tendem a reduzir recorrência, aumentar custos de aquisição e pressionar margens no médio e longo prazo.
+Do ponto de vista de reputação, a alta concentração de notas baixas associadas a atrasos pode comprometer a imagem da plataforma e a confiança do consumidor. Por fim, há um possível impacto financeiro indireto, já que clientes insatisfeitos tendem a comprar menos vezes, o que aumenta a necessidade de investir em aquisição. Esses efeitos financeiros não foram modelados e devem ser tratados como implicações, não como resultados medidos.
 
 ## 8. Recomendações
 Com base nos resultados apresentados, recomenda-se a priorização de ações focadas em redução de atrasos, controle operacional e mitigação do impacto na experiência do cliente.
 
 No curto prazo, é essencial atuar sobre os estados e sellers com maiores taxas e médias de atraso, estabelecendo planos de correção específicos e acompanhamento contínuo por meio de metas operacionais. Também é recomendado o uso dos KPIs como indicadores de performance ativa, com monitoramento periódico.
 
-No médio prazo, ajustes nos prazos estimados de entrega devem ser realizados para refletir melhor a realidade logística, reduzindo frustração do cliente e avaliações negativas. Adicionalmente, estratégias de comunicação proativa com clientes em pedidos com risco de atraso podem mitigar o impacto na satisfação.
+No médio prazo, os prazos estimados de entrega devem ser calibrados por região e por vendedor. Hoje eles são, em média, quase o dobro do tempo real, mas ainda assim são estourados em 6,8% dos pedidos: há espaço para encurtar prazos onde a operação é consistentemente rápida e reforçá-los onde os atrasos se concentram. Adicionalmente, estratégias de comunicação proativa com clientes em pedidos com risco de atraso podem mitigar o impacto na satisfação.
 
 Como ação estratégica, a empresa deve utilizar os dados de atraso como critério para avaliação de parceiros logísticos e vendedores, reforçando padrões mínimos de desempenho operacional.
 
 ## 9. Conclusão
-A análise evidenciou que os atrasos logísticos possuem impacto direto e significativo na satisfação dos clientes, reduzindo o score médio das avaliações e aumentando fortemente a probabilidade de notas mínimas. Além disso, foi possível identificar diferenças relevantes de desempenho entre estados e operações, indicando gargalos logísticos específicos por região.
+A análise evidenciou uma associação forte entre atrasos logísticos e satisfação dos clientes: pedidos atrasados têm score médio quase 50% menor e cerca de 8 vezes mais chance de receber nota mínima. Além disso, foi possível identificar diferenças relevantes de desempenho entre estados e vendedores, indicando gargalos logísticos específicos por região.
 
-Os KPIs analisados mostram que parte dos prazos estimados não reflete a realidade operacional, o que contribui para a frustração do cliente e perda de reputação da empresa. Esse cenário reforça a necessidade de ajustes nos prazos, maior controle sobre sellers e aprimoramento da gestão logística.
+Os KPIs mostram que os prazos estimados são, em geral, conservadores (24,4 dias estimados contra 12,5 reais), mas não evitam os atrasos nos pontos críticos da operação. Esse cenário reforça a necessidade de calibrar os prazos, aumentar o acompanhamento dos vendedores com pior desempenho e aprimorar a gestão logística nas regiões mais afetadas.
 
 De forma geral, os dados geram insumos claros para decisões estratégicas voltadas à eficiência operacional, melhoria da experiência do cliente e redução de impactos negativos na imagem e nos resultados do negócio.

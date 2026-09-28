@@ -1,6 +1,7 @@
 ﻿Indicador,Valor
-Taxa de atraso (%),7.61
-Atraso médio (dias),-14.73
-Tempo médio de entrega real (dias),8.75
-Tempo médio estimado (dias),23.5
-Erro médio da estimativa (dias),-14.73
+Pedidos entregues analisados,96470.0
+Taxa de atraso (%),6.77
+Atraso médio dos pedidos atrasados (dias),10.62
+Tempo médio de entrega real (dias),12.5
+Tempo médio estimado (dias),24.37
+Folga média da estimativa (dias),11.88
